@@ -69,6 +69,62 @@ Widget defaultTextFormField({
   );
 }
 
+Widget buildNewsItem(dataList) {
+  return Padding(
+    padding: const EdgeInsets.all(15.0),
+    child: Row(
+      children: [
+        Container(
+          height: 125,
+          width: 125,
+          child:dataList['urlToImage']!=null? ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: FadeInImage(
+              image: NetworkImage(
+                  '${dataList['urlToImage']}'
+              ),
+              placeholder: AssetImage('assets/images/photo.png'),
+              fit: BoxFit.cover,
+            ),
+          ):ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Image( image: AssetImage('assets/images/no-pictures (1).png'),fit: BoxFit.cover),
+          ),
+        ),
+        SizedBox(
+          width: 15,
+        ),
+        Expanded(
+          child: Container(
+            height: 125,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  '${dataList['title']}',
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                  ),
+                ),
+                Text(
+                  '${dataList['publishedAt']}',
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
 // Widget appNoData(
 //     {required IconData icon, Color color = Colors.blue, required String txt}) {
@@ -85,8 +141,6 @@ Widget defaultTextFormField({
 //     ),
 //   );
 // }
-
-
 
 // Bottom Navigation Bar
 

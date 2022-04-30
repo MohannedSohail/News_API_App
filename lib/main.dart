@@ -1,30 +1,76 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:news_app_api/shared/network/remote/dio_helper.dart';
+
+import 'layout/news_layout.dart';
 
 void main() {
   runApp(const MyApp());
+
+  DioHelper.initDio();
+  print("DioHelper Is Initialed");
+
+
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
+
+
   @override
   Widget build(BuildContext context) {
+
+    // To Hide Status Bar & Bottom Bar
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'News App',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
+
+        progressIndicatorTheme: ProgressIndicatorThemeData(
+          circularTrackColor: Colors.teal,
+          color: Colors.grey,
+        ),
+        navigationBarTheme: NavigationBarThemeData(
+          indicatorColor: Colors.teal.withOpacity(0.3),
+          labelTextStyle: MaterialStateProperty.all(
+            TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
         primarySwatch: Colors.blue,
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.teal,
+          splashColor: Colors.tealAccent,
+          elevation: 10,
+        ),
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          iconTheme: IconThemeData(
+            color: Colors.black
+          ),
+          titleTextStyle: TextStyle(color: Colors.black,fontSize: 23,fontWeight: FontWeight.w400),
+          backgroundColor: Colors.teal.withOpacity(0.6),
+          // centerTitle: true,
+          backwardsCompatibility: false,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.white,
+            // statusBarBrightness: Brightness.light,
+            // statusBarIconBrightness: Brightness.dark,
+          ),
+          elevation: 0,
+
+        ),
+
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+
+
+      home: const NewsLayout(),
     );
   }
 }
