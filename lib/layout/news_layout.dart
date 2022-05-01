@@ -23,7 +23,7 @@ class NewsLayout extends StatelessWidget {
               elevation: 0,
               backgroundColor: Colors.transparent,
             ) :AppBar(
-              title: Text("News App"),
+              title: Text("Daily News App"),
               actions: [
                 IconButton(onPressed: (){}, icon: Icon(Icons.search)),
               ],
@@ -71,7 +71,7 @@ class NewsLayout extends StatelessWidget {
                     label: 'Sports',
                   ),
                   NavigationDestination(
-                    selectedIcon: Icon(Icons.settings,),
+                    selectedIcon: Icon(Icons.settings,color: Colors.indigo[900]),
                     icon: Icon(Icons.settings_outlined,color: cubit.isDark?Colors.white:Colors.black),
                     label: 'Settings',
                   ),

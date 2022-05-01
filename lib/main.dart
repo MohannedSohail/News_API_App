@@ -3,21 +3,36 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app_api/shared/cubit/cubit.dart';
 import 'package:news_app_api/shared/cubit/states.dart';
+import 'package:news_app_api/shared/network/local/cache_helper.dart';
 import 'package:news_app_api/shared/network/remote/dio_helper.dart';
 
 import 'layout/news_layout.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async{
 
+
+  WidgetsFlutterBinding.ensureInitialized();
   DioHelper.initDio();
   print("DioHelper Is Initialed");
+
+  await CacheHelper.initSharedPreferences();
+
+  bool? isDark=CacheHelper.getData(key: "isDark");
+  runApp(MyApp(isDark));
+
+
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+
 
   // This widget is the root of your application.
+
+
+  final bool? isDark;
+
+
+  MyApp(this.isDark);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +40,7 @@ class MyApp extends StatelessWidget {
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
     return BlocProvider(
-      create: (BuildContext context) => NewsCubit()
+      create: (BuildContext context) => NewsCubit()..changeAppMode(darkMode: isDark)
         ..getBusiness(),
         // ..getSports()
         // ..getScience(),
@@ -35,7 +50,7 @@ class MyApp extends StatelessWidget {
           NewsCubit cubit = NewsCubit.get(context);
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'News App',
+            title: ' Daily News App',
             theme: ThemeData(
 
               progressIndicatorTheme: ProgressIndicatorThemeData(
@@ -70,7 +85,7 @@ class MyApp extends StatelessWidget {
                 // centerTitle: true,
                 backwardsCompatibility: false,
                 systemOverlayStyle: SystemUiOverlayStyle(
-                  statusBarColor: Colors.white,
+                  statusBarColor: Colors.black,
                   // statusBarBrightness: Brightness.light,
                   // statusBarIconBrightness: Brightness.dark,
                 ),
@@ -99,10 +114,16 @@ class MyApp extends StatelessWidget {
                 ),
               ),
               appBarTheme: AppBarTheme(
+                  systemOverlayStyle: SystemUiOverlayStyle(
+                    statusBarColor: Color(0xff3a3b3c),
+                    // statusBarBrightness: Brightness.light,
+                    // statusBarIconBrightness: Brightness.dark,
+                  ),
                 titleSpacing: 20,
                   backgroundColor: Color(0xff3a3b3c),
                   actionsIconTheme: IconThemeData(
                     color: Colors.white,
+
                   )),
               navigationBarTheme: NavigationBarThemeData(
                 backgroundColor: Color(0xff3a3b3c),

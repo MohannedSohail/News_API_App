@@ -84,7 +84,7 @@ class SettingsScreen extends StatelessWidget {
                             SizedBox(
                               width: 15,
                             ),
-                            Expanded(child: Text(" Change Language To ( EN )",style: TextStyle(
+                            Expanded(child: Text(" Change Application direction",style: TextStyle(
                               color: cubit.isDark? Colors.black:Colors.white,
                             ),)),
                             Switch(
