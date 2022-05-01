@@ -36,6 +36,9 @@ class NewsGetScienceSuccessState extends NewsStates{}
 
 class NewsScienceLoadingState extends NewsStates{}
 
+class AppChangeModeState extends NewsStates{}
+class AppChangeLanguageState extends NewsStates{}
+
 class NewsGetScienceErrorState extends NewsStates{
 
   final String error;

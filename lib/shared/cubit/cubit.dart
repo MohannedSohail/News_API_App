@@ -5,7 +5,7 @@ import 'package:news_app_api/modules/science/science_screen.dart';
 import 'package:news_app_api/modules/sports/sports_screen.dart';
 import 'package:news_app_api/shared/cubit/states.dart';
 
-import '../../modules/settings/sports_screen.dart';
+import '../../modules/settings/settings_screen.dart';
 import '../network/remote/dio_helper.dart';
 
 class NewsCubit extends Cubit<NewsStates> {
@@ -25,6 +25,25 @@ class NewsCubit extends Cubit<NewsStates> {
  List<dynamic> business=[];
  List<dynamic> sports=[];
  List<dynamic> science=[];
+
+
+  bool isDark=false;
+
+  void changeAppMode(){
+
+    isDark=!isDark;
+
+    emit(AppChangeModeState());
+  }
+
+  bool isRtl=false;
+
+  void changeAppLanguage(){
+
+    isRtl=!isRtl;
+
+    emit(AppChangeLanguageState());
+  }
 
   void changeIndex(int index){
 
@@ -133,5 +152,7 @@ class NewsCubit extends Cubit<NewsStates> {
     }
 
   }
+
+
 
 }

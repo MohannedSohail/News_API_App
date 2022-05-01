@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../cubit/cubit.dart';
+
 Container defaultButton(
     {double? width = double.infinity,
     Color color = Colors.blue,
@@ -69,7 +71,7 @@ Widget defaultTextFormField({
   );
 }
 
-Widget buildNewsItem(dataList) {
+Widget buildNewsItem(dataList,context) {
   return Padding(
     padding: const EdgeInsets.all(15.0),
     child: Row(
@@ -83,7 +85,7 @@ Widget buildNewsItem(dataList) {
               image: NetworkImage(
                   '${dataList['urlToImage']}'
               ),
-              placeholder: AssetImage('assets/images/photo.png'),
+              placeholder: AssetImage('assets/images/photo (1).png'),
               fit: BoxFit.cover,
             ),
           ):ClipRRect(
@@ -105,11 +107,7 @@ Widget buildNewsItem(dataList) {
                   '${dataList['title']}',
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                  ),
+                  style: Theme.of(context).textTheme.bodyText1,
                 ),
                 Text(
                   '${dataList['publishedAt']}',
@@ -164,3 +162,28 @@ Widget buildNewsItem(dataList) {
 //         icon: Icon(Icons.archive_outlined), label: "Archived"),
 //   ],
 // )
+
+
+Widget screenBuilder(list,context){
+  NewsCubit cubit = NewsCubit.get(context);
+
+  return list.length>0
+      ?ListView.separated(
+
+    // Rendering number of Images
+    // physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
+      physics: BouncingScrollPhysics(),
+      itemBuilder: (context, index) {
+        return buildNewsItem(list[index],context);
+      },
+      separatorBuilder: (context, index) => Container(
+        margin: EdgeInsets.only(left: 10, right: 10),
+        width: double.infinity,
+        height: 2,
+        color: Colors.grey[350],
+      ),
+      itemCount: cubit.business.length):
+  Center(
+    child: CircularProgressIndicator(),
+  );
+}

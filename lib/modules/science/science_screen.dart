@@ -17,27 +17,7 @@ class ScienceScreen extends StatelessWidget {
       builder: (context, state) {
         var list=cubit.science;
 
-        return list.length>0
-            ? ListView.separated(
-
-          // Rendering number of Images
-          // physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
-
-
-            physics: BouncingScrollPhysics(),
-            itemBuilder: (context, index) {
-              return buildNewsItem(list[index]);
-            },
-            separatorBuilder: (context, index) => Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
-              width: double.infinity,
-              height: 2,
-              color: Colors.grey[350],
-            ),
-            itemCount: cubit.business.length):
-        Center(
-          child: CircularProgressIndicator(),
-        );
+        return screenBuilder(list,context);
       },
     );
   }
