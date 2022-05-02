@@ -16,68 +16,56 @@ class NewsCubit extends Cubit<NewsStates> {
 
   int currentIndex = 0;
 
-  List<Widget> screens=[
+  List<Widget> screens = [
     BusinessScreen(),
     ScienceScreen(),
     SportsScreen(),
     SettingsScreen(),
   ];
 
- List<dynamic> business=[];
- List<dynamic> sports=[];
- List<dynamic> science=[];
+  List<dynamic> business = [];
+  List<dynamic> sports = [];
+  List<dynamic> science = [];
+  List<dynamic> search = [];
 
 
-  bool isDark=false;
+  bool isDark = false;
 
-  void changeAppMode({bool? darkMode}){
-
-    if(darkMode!=null){
-      isDark=darkMode;
+  void changeAppMode({bool? darkMode}) {
+    if (darkMode != null) {
+      isDark = darkMode;
       emit(AppChangeModeState());
-
-
-    }
-    else{
-      isDark=!isDark;
+    } else {
+      isDark = !isDark;
 
       CacheHelper.putData(key: "isDark", value: isDark).then((value) {
-
         emit(AppChangeModeState());
-
       });
     }
-
-
   }
 
-  bool isRtl=false;
+  bool isRtl = false;
 
-  void changeAppLanguage(){
-
-    isRtl=!isRtl;
+  void changeAppLanguage() {
+    isRtl = !isRtl;
 
     emit(AppChangeLanguageState());
   }
 
-  void changeIndex(int index){
+  void changeIndex(int index) {
+    currentIndex = index;
 
-    currentIndex=index;
-
-    if(index==0){
+    if (index == 0) {
       getBusiness();
-    }else if(index==1){
+    } else if (index == 1) {
       getScience();
-
-    }else if(index==2){
+    } else if (index == 2) {
       getSports();
     }
     emit(NewsChangeIndexState());
-
   }
 
-  void getBusiness(){
-
+  void getBusiness() {
     emit(NewsBusinessLoadingState());
     //   DioHelper.getData(path: "v2/everything", query: {
     //   'q':'tesla',
@@ -85,27 +73,23 @@ class NewsCubit extends Cubit<NewsStates> {
     //   'sortBy':'publishedAt',
     //   'apiKey':'d48789e203084bad9900d0411b20eaae',
     // })
-     DioHelper.getData(path: "v2/top-headlines", query: {
-       'country':'us',
-       'category':'business',
-       'apiKey':'d48789e203084bad9900d0411b20eaae',
-     })
-        .then((value){
-          business=value.data['articles'];
-          print(business.length);
+    DioHelper.getData(path: "v2/top-headlines", query: {
+      'country': 'us',
+      'category': 'business',
+      'apiKey': 'd48789e203084bad9900d0411b20eaae',
+    }).then((value) {
+      business = value.data['articles'];
+      print(business.length);
 
-          emit(NewsGetBusinessSuccessState());
-    }).catchError((error){
-
+      emit(NewsGetBusinessSuccessState());
+    }).catchError((error) {
       print("Error => ${error.toString()}");
       emit(NewsGetBusinessErrorState(error.toString()));
     });
   }
 
-  void getSports(){
-
-    if(sports.length==0){
-
+  void getSports() {
+    if (sports.length == 0) {
       emit(NewsSportsLoadingState());
       //   DioHelper.getData(path: "v2/everything", query: {
       //   'q':'tesla',
@@ -114,31 +98,25 @@ class NewsCubit extends Cubit<NewsStates> {
       //   'apiKey':'d48789e203084bad9900d0411b20eaae',
       // })
       DioHelper.getData(path: "v2/top-headlines", query: {
-        'country':'us',
-        'category':'sports',
-        'apiKey':'d48789e203084bad9900d0411b20eaae',
-      })
-          .then((value){
-        sports=value.data['articles'];
+        'country': 'us',
+        'category': 'sports',
+        'apiKey': 'd48789e203084bad9900d0411b20eaae',
+      }).then((value) {
+        sports = value.data['articles'];
         print(sports.length);
 
         emit(NewsGetSportsSuccessState());
-      }).catchError((error){
-
+      }).catchError((error) {
         print("Error => ${error.toString()}");
         emit(NewsGetSportsErrorState(error.toString()));
       });
-    }else{
+    } else {
       emit(NewsGetSportsSuccessState());
-
     }
-
-
   }
 
-  void getScience(){
-
-    if(science.length==0){
+  void getScience() {
+    if (science.length == 0) {
       emit(NewsScienceLoadingState());
       //   DioHelper.getData(path: "v2/everything", query: {
       //   'q':'tesla',
@@ -147,27 +125,41 @@ class NewsCubit extends Cubit<NewsStates> {
       //   'apiKey':'d48789e203084bad9900d0411b20eaae',
       // })
       DioHelper.getData(path: "v2/top-headlines", query: {
-        'country':'us',
-        'category':'science',
-        'apiKey':'d48789e203084bad9900d0411b20eaae',
-      })
-          .then((value){
-        science=value.data['articles'];
+        'country': 'us',
+        'category': 'science',
+        'apiKey': 'd48789e203084bad9900d0411b20eaae',
+      }).then((value) {
+        science = value.data['articles'];
         print(science.length);
 
         emit(NewsGetScienceSuccessState());
-      }).catchError((error){
-
+      }).catchError((error) {
         print("Error => ${error.toString()}");
         emit(NewsGetScienceErrorState(error.toString()));
       });
-    }else{
+    } else {
       emit(NewsGetScienceSuccessState());
-
     }
-
   }
 
 
+  void getSearch(String searchValue) {
+    //https://newsapi.org/v2/everything?q=tesla&apiKey=d48789e203084bad9900d0411b20eaae
+    emit(NewsSearchLoadingState());
 
+    DioHelper.getData(path: "v2/everything", query: {
+      'q': '$searchValue',
+      'apiKey': 'd48789e203084bad9900d0411b20eaae',
+    },).then((value) {
+      search = value.data['articles'];
+      print(search.length);
+
+      emit(NewsGetSearchSuccessState());
+    }).catchError((error) {
+      print("Error => ${error.toString()}");
+      emit(NewsGetSportsErrorState(error.toString()));
+    });
+
+    emit(NewsGetSearchSuccessState());
+  }
 }

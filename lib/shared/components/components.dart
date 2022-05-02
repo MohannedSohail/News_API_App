@@ -71,7 +71,7 @@ Widget defaultTextFormField({
   );
 }
 
-Widget buildNewsItem(dataList,context) {
+Widget buildNewsItem(dataList, context) {
   return Padding(
     padding: const EdgeInsets.all(15.0),
     child: Row(
@@ -79,19 +79,21 @@ Widget buildNewsItem(dataList,context) {
         Container(
           height: 125,
           width: 125,
-          child:dataList['urlToImage']!=null? ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: FadeInImage(
-              image: NetworkImage(
-                  '${dataList['urlToImage']}'
-              ),
-              placeholder: AssetImage('assets/images/photo (1).png'),
-              fit: BoxFit.cover,
-            ),
-          ):ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image( image: AssetImage('assets/images/no-pictures (1).png'),fit: BoxFit.cover),
-          ),
+          child: dataList['urlToImage'] != null
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: FadeInImage(
+                    image: NetworkImage('${dataList['urlToImage']}'),
+                    placeholder: AssetImage('assets/images/photo (1).png'),
+                    fit: BoxFit.cover,
+                  ),
+                )
+              : ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image(
+                      image: AssetImage('assets/images/no-pictures (1).png'),
+                      fit: BoxFit.cover),
+                ),
         ),
         SizedBox(
           width: 15,
@@ -163,27 +165,30 @@ Widget buildNewsItem(dataList,context) {
 //   ],
 // )
 
-
-Widget screenBuilder(list,context){
+Widget screenBuilder(list, context) {
   NewsCubit cubit = NewsCubit.get(context);
 
-  return list.length>0
-      ?ListView.separated(
+  return list.length > 0
+      ? ListView.separated(
 
-    // Rendering number of Images
-    // physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
-      physics: BouncingScrollPhysics(),
-      itemBuilder: (context, index) {
-        return buildNewsItem(list[index],context);
-      },
-      separatorBuilder: (context, index) => Container(
-        margin: EdgeInsets.only(left: 10, right: 10),
-        width: double.infinity,
-        height: 2,
-        color: Colors.grey[350],
-      ),
-      itemCount: cubit.business.length):
-  Center(
-    child: CircularProgressIndicator(),
-  );
+          // Rendering number of Images
+          // physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
+          physics: BouncingScrollPhysics(),
+          itemBuilder: (context, index) {
+            return buildNewsItem(list[index], context);
+          },
+          separatorBuilder: (context, index) => Container(
+                margin: EdgeInsets.only(left: 10, right: 10),
+                width: double.infinity,
+                height: 2,
+                color: Colors.grey[350],
+              ),
+          itemCount: cubit.business.length)
+      : Center(
+          child: CircularProgressIndicator(),
+        );
+}
+
+void navigateTo(context, widget) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
 }
