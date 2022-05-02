@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:news_app_api/modules/business/business_screen.dart';
 import 'package:news_app_api/modules/science/science_screen.dart';
 import 'package:news_app_api/modules/sports/sports_screen.dart';
@@ -15,6 +16,8 @@ class NewsCubit extends Cubit<NewsStates> {
   static NewsCubit get(context) => BlocProvider.of(context);
 
   int currentIndex = 0;
+
+
 
   List<Widget> screens = [
     BusinessScreen(),
@@ -76,7 +79,7 @@ class NewsCubit extends Cubit<NewsStates> {
     DioHelper.getData(path: "v2/top-headlines", query: {
       'country': 'us',
       'category': 'business',
-      'apiKey': 'd48789e203084bad9900d0411b20eaae',
+      'apiKey': 'c0d42df9def6430283640131e3d26dae',
     }).then((value) {
       business = value.data['articles'];
       print(business.length);
@@ -100,7 +103,7 @@ class NewsCubit extends Cubit<NewsStates> {
       DioHelper.getData(path: "v2/top-headlines", query: {
         'country': 'us',
         'category': 'sports',
-        'apiKey': 'd48789e203084bad9900d0411b20eaae',
+        'apiKey': 'c0d42df9def6430283640131e3d26dae',
       }).then((value) {
         sports = value.data['articles'];
         print(sports.length);
@@ -127,7 +130,7 @@ class NewsCubit extends Cubit<NewsStates> {
       DioHelper.getData(path: "v2/top-headlines", query: {
         'country': 'us',
         'category': 'science',
-        'apiKey': 'd48789e203084bad9900d0411b20eaae',
+        'apiKey': 'c0d42df9def6430283640131e3d26dae',
       }).then((value) {
         science = value.data['articles'];
         print(science.length);
@@ -149,7 +152,7 @@ class NewsCubit extends Cubit<NewsStates> {
 
     DioHelper.getData(path: "v2/everything", query: {
       'q': '$searchValue',
-      'apiKey': 'd48789e203084bad9900d0411b20eaae',
+      'apiKey': 'c0d42df9def6430283640131e3d26dae',
     },).then((value) {
       search = value.data['articles'];
       print(search.length);
@@ -161,5 +164,22 @@ class NewsCubit extends Cubit<NewsStates> {
     });
 
     emit(NewsGetSearchSuccessState());
+  }
+
+  bool? isConnection;
+
+  void checkInternet(){
+
+    InternetConnectionChecker().hasConnection.then((value) {
+
+      isConnection=value;
+
+      emit(IsConnectedState());
+
+    });
+
+    // internetIsConnection=isConnection;
+
+
   }
 }

@@ -20,7 +20,10 @@ class NewsLayout extends StatelessWidget {
 
         NewsCubit cubit = NewsCubit.get(context);
 
-        return Scaffold(
+        cubit.checkInternet();
+
+
+        return cubit.isConnection==true? Scaffold(
             appBar: cubit.currentIndex==3?AppBar(
               elevation: 0,
               backgroundColor: Colors.transparent,
@@ -28,7 +31,7 @@ class NewsLayout extends StatelessWidget {
               title: Text("Daily News App"),
               actions: [
                 IconButton(onPressed: (){
-
+                  cubit.search=[];
                   navigateTo(context, SearchScreen());
                 }, icon: Icon(Icons.search)),
               ],
@@ -83,9 +86,30 @@ class NewsLayout extends StatelessWidget {
                 ],
               ),
           body: cubit.screens[cubit.currentIndex],
-            );
+            ):Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: 350,
+                  width: 350,
+                  child: Image.asset("assets/images/No connection.png"),
+                ),
+                SizedBox(height: 10,),
+                Text("No Internet !",style: TextStyle(color: cubit.isDark?Colors.white:Colors.black,fontSize: 18)),
+                SizedBox(height: 10,),
+                Text("Please Check Your Internet\nConnection",style: TextStyle(color: Colors.grey,fontSize: 15,fontWeight: FontWeight.w600,),textAlign: TextAlign.center),
+              ],
+            ),
+          ),
+        );
       },
-      listener: (BuildContext context, Object? state) {},
+      listener: (BuildContext context, Object? state) {
+
+      },
     );
   }
 }
+
+

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:news_app_api/shared/cubit/cubit.dart';
 import 'package:news_app_api/shared/cubit/states.dart';
 import 'package:news_app_api/shared/network/local/cache_helper.dart';
@@ -8,29 +9,22 @@ import 'package:news_app_api/shared/network/remote/dio_helper.dart';
 
 import 'layout/news_layout.dart';
 
-void main() async{
-
-
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   DioHelper.initDio();
   print("DioHelper Is Initialed");
 
   await CacheHelper.initSharedPreferences();
 
-  bool? isDark=CacheHelper.getData(key: "isDark");
+  bool? isDark = CacheHelper.getData(key: "isDark");
+
   runApp(MyApp(isDark));
-
-
 }
 
 class MyApp extends StatelessWidget {
-
-
   // This widget is the root of your application.
 
-
   final bool? isDark;
-
 
   MyApp(this.isDark);
 
@@ -40,10 +34,11 @@ class MyApp extends StatelessWidget {
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
     return BlocProvider(
-      create: (BuildContext context) => NewsCubit()..changeAppMode(darkMode: isDark)
-        ..getBusiness(),
-        // ..getSports()
-        // ..getScience(),
+      create: (BuildContext context) => NewsCubit()
+        ..getBusiness()
+        ..changeAppMode(darkMode: isDark),
+      // ..getSports()
+      // ..getScience(),
       child: BlocConsumer<NewsCubit, NewsStates>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -52,10 +47,23 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: ' Daily News App',
             theme: ThemeData(
-
+              iconTheme: IconThemeData(color: Colors.black),
               progressIndicatorTheme: ProgressIndicatorThemeData(
                 circularTrackColor: Colors.teal,
                 color: Colors.grey,
+              ),
+              inputDecorationTheme: InputDecorationTheme(
+                prefixIconColor: Colors.black,
+                hintStyle: TextStyle(color: Colors.black),
+                labelStyle: TextStyle(color: Colors.black),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.black,
+                    ),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.teal, width: 2),
+                    borderRadius: BorderRadius.circular(10)),
               ),
               navigationBarTheme: NavigationBarThemeData(
                 backgroundColor: Colors.grey.shade100,
@@ -79,7 +87,7 @@ class MyApp extends StatelessWidget {
                 iconTheme: IconThemeData(color: Colors.black),
                 titleTextStyle: TextStyle(
                     color: Colors.black,
-                    fontSize: 23,
+                    fontSize: 20,
                     fontWeight: FontWeight.w400),
                 backgroundColor: Colors.teal.withOpacity(0.6),
                 // centerTitle: true,
@@ -97,7 +105,6 @@ class MyApp extends StatelessWidget {
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                 ),
-
               ),
             ),
             darkTheme: ThemeData(
@@ -106,6 +113,18 @@ class MyApp extends StatelessWidget {
                 circularTrackColor: Colors.black,
                 color: Colors.teal[200],
               ),
+              inputDecorationTheme: InputDecorationTheme(
+                prefixIconColor: Colors.white,
+                hintStyle: TextStyle(color: Colors.white),
+                labelStyle: TextStyle(color: Colors.white),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.teal, width: 2),
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+              iconTheme: IconThemeData(color: Colors.white),
               textTheme: TextTheme(
                 bodyText1: TextStyle(
                   color: Colors.white,
@@ -119,16 +138,19 @@ class MyApp extends StatelessWidget {
                     // statusBarBrightness: Brightness.light,
                     // statusBarIconBrightness: Brightness.dark,
                   ),
-                titleSpacing: 20,
+                  iconTheme: IconThemeData(color: Colors.white),
+                  titleSpacing: 20,
+                  titleTextStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400),
                   backgroundColor: Color(0xff3a3b3c),
                   actionsIconTheme: IconThemeData(
                     color: Colors.white,
-
                   )),
               navigationBarTheme: NavigationBarThemeData(
                 backgroundColor: Color(0xff3a3b3c),
                 indicatorColor: Colors.white,
-
                 labelTextStyle: MaterialStateProperty.all(
                   TextStyle(
                     fontSize: 12,
@@ -140,7 +162,9 @@ class MyApp extends StatelessWidget {
             ),
             themeMode: cubit.isDark ? ThemeMode.dark : ThemeMode.light,
             home: Directionality(
-                textDirection:cubit.isRtl?TextDirection.rtl: TextDirection.ltr, child: NewsLayout()),
+                textDirection:
+                    cubit.isRtl ? TextDirection.rtl : TextDirection.ltr,
+                child: NewsLayout()),
           );
         },
       ),

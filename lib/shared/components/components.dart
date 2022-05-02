@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:news_app_api/modules/web_view/webview_screen.dart';
 
 import '../cubit/cubit.dart';
 
@@ -26,14 +27,15 @@ Container defaultButton(
   );
 }
 
-Widget defaultTextFormField({
+Widget  defaultTextFormField({
   required TextEditingController controller,
   TextInputType? type,
   ValueChanged? onSubmit,
   ValueChanged? onChange,
   required FormFieldValidator validator,
-  required String labelTxt,
-  required IconData prefixIcon,
+   String? labelTxt,
+   String? hintTxt,
+  // required IconData prefixIcon,
   IconData? suffixIcon,
   VoidCallback? suffixOnPressed,
   bool obscureText = false,
@@ -41,6 +43,12 @@ Widget defaultTextFormField({
   GestureTapCallback? onTap,
   bool readOnly = false,
   bool showCursor = false,
+  InputBorder? enabledborderColor,
+  InputBorder? focusedborderColor,
+   Widget? prefixIcon,
+  TextStyle? lblStyle,
+  TextStyle? hintTxtStyle,
+  TextStyle? styleTxtFormField,
 }) {
   return TextFormField(
     controller: controller,
@@ -52,6 +60,7 @@ Widget defaultTextFormField({
     onTap: onTap,
     readOnly: readOnly,
     showCursor: showCursor,
+    style: styleTxtFormField ,
 
     // ADD LIMIT TO (TextFormField)
     // inputFormatters: [
@@ -61,67 +70,77 @@ Widget defaultTextFormField({
     inputFormatters: inputFormatter,
 
     decoration: InputDecoration(
+      focusedBorder:focusedborderColor ,
+      enabledBorder: enabledborderColor,
         labelText: labelTxt,
-        prefixIcon: Icon(prefixIcon),
+        labelStyle:lblStyle ,
+        hintText: hintTxt,
+        hintStyle: hintTxtStyle,
+        prefixIcon:prefixIcon,
         suffixIcon:
             IconButton(icon: Icon(suffixIcon), onPressed: suffixOnPressed),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(10),
         )),
   );
 }
 
 Widget buildNewsItem(dataList, context) {
-  return Padding(
-    padding: const EdgeInsets.all(15.0),
-    child: Row(
-      children: [
-        Container(
-          height: 125,
-          width: 125,
-          child: dataList['urlToImage'] != null
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: FadeInImage(
-                    image: NetworkImage('${dataList['urlToImage']}'),
-                    placeholder: AssetImage('assets/images/photo (1).png'),
-                    fit: BoxFit.cover,
-                  ),
-                )
-              : ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image(
-                      image: AssetImage('assets/images/no-pictures (1).png'),
-                      fit: BoxFit.cover),
-                ),
-        ),
-        SizedBox(
-          width: 15,
-        ),
-        Expanded(
-          child: Container(
+  return InkWell(
+    onTap: (){
+      navigateTo(context, WebViewScreen(dataList['url']));
+    },
+    child: Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Row(
+        children: [
+          Container(
             height: 125,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text(
-                  '${dataList['title']}',
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                Text(
-                  '${dataList['publishedAt']}',
-                  style: TextStyle(
-                    color: Colors.grey,
+            width: 125,
+            child: dataList['urlToImage'] != null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: FadeInImage(
+                      image: NetworkImage('${dataList['urlToImage']}'),
+                      placeholder: AssetImage('assets/images/photo (1).png'),
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image(
+                        image: AssetImage('assets/images/no-pictures (1).png'),
+                        fit: BoxFit.cover),
                   ),
-                )
-              ],
+          ),
+          SizedBox(
+            width: 15,
+          ),
+          Expanded(
+            child: Container(
+              height: 125,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    '${dataList['title']}',
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  Text(
+                    '${dataList['publishedAt']}',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }

@@ -61,3 +61,7 @@ class NewsGetSearchErrorState extends NewsStates{
 
 }
 
+
+class IsConnectedState extends NewsStates{}
+
+
