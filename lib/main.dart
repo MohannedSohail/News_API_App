@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:news_app_api/shared/cubit/cubit.dart';
 import 'package:news_app_api/shared/cubit/states.dart';
 import 'package:news_app_api/shared/network/local/cache_helper.dart';

@@ -49,6 +49,8 @@ Widget  defaultTextFormField({
   TextStyle? lblStyle,
   TextStyle? hintTxtStyle,
   TextStyle? styleTxtFormField,
+  Color?cursorColor,
+  int? maxLength,
 }) {
   return TextFormField(
     controller: controller,
@@ -61,6 +63,10 @@ Widget  defaultTextFormField({
     readOnly: readOnly,
     showCursor: showCursor,
     style: styleTxtFormField ,
+    cursorColor:cursorColor ,
+    maxLength:maxLength,
+
+
 
     // ADD LIMIT TO (TextFormField)
     // inputFormatters: [
@@ -88,7 +94,7 @@ Widget  defaultTextFormField({
 Widget buildNewsItem(dataList, context) {
   return InkWell(
     onTap: (){
-      navigateTo(context, WebViewScreen(dataList['url']));
+      navigateTo(context, WebViewScreen(dataList['url'],dataList['title']));
     },
     child: Padding(
       padding: const EdgeInsets.all(15.0),
@@ -184,7 +190,7 @@ Widget buildNewsItem(dataList, context) {
 //   ],
 // )
 
-Widget screenBuilder(list, context) {
+Widget screenBuilder(list, context,{isSearch=false}) {
   NewsCubit cubit = NewsCubit.get(context);
 
   return list.length > 0
@@ -203,7 +209,7 @@ Widget screenBuilder(list, context) {
                 color: Colors.grey[350],
               ),
           itemCount: cubit.business.length)
-      : Center(
+      : isSearch? Container() :Center(
           child: CircularProgressIndicator(),
         );
 }

@@ -6,7 +6,6 @@ import 'package:news_app_api/modules/search/search_screen.dart';
 import 'package:news_app_api/shared/components/components.dart';
 import 'package:news_app_api/shared/cubit/cubit.dart';
 import 'package:news_app_api/shared/cubit/states.dart';
-import 'package:news_app_api/shared/network/remote/dio_helper.dart';
 
 class NewsLayout extends StatelessWidget {
   const NewsLayout({Key? key}) : super(key: key);
@@ -33,7 +32,7 @@ class NewsLayout extends StatelessWidget {
                 IconButton(onPressed: (){
                   cubit.search=[];
                   navigateTo(context, SearchScreen());
-                }, icon: Icon(Icons.search)),
+                }, icon: Icon(Icons.search,color: cubit.isDark ? Colors.white : Colors.black,)),
               ],
             ),
 

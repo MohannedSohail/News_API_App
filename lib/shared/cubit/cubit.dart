@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:news_app_api/modules/business/business_screen.dart';
@@ -92,7 +94,7 @@ class NewsCubit extends Cubit<NewsStates> {
   }
 
   void getSports() {
-    if (sports.length == 0) {
+    if (sports.isEmpty) {
       emit(NewsSportsLoadingState());
       //   DioHelper.getData(path: "v2/everything", query: {
       //   'q':'tesla',
@@ -106,7 +108,12 @@ class NewsCubit extends Cubit<NewsStates> {
         'apiKey': 'c0d42df9def6430283640131e3d26dae',
       }).then((value) {
         sports = value.data['articles'];
-        print(sports.length);
+
+
+        if(kDebugMode){
+          print(sports.length);
+
+        }
 
         emit(NewsGetSportsSuccessState());
       }).catchError((error) {
@@ -119,7 +126,7 @@ class NewsCubit extends Cubit<NewsStates> {
   }
 
   void getScience() {
-    if (science.length == 0) {
+    if (science.isEmpty) {
       emit(NewsScienceLoadingState());
       //   DioHelper.getData(path: "v2/everything", query: {
       //   'q':'tesla',
@@ -146,12 +153,13 @@ class NewsCubit extends Cubit<NewsStates> {
   }
 
 
-  void getSearch(String searchValue) {
+  void getSearch(searchValue) {
     //https://newsapi.org/v2/everything?q=tesla&apiKey=d48789e203084bad9900d0411b20eaae
+    search=[];
     emit(NewsSearchLoadingState());
 
     DioHelper.getData(path: "v2/everything", query: {
-      'q': '$searchValue',
+      'q': searchValue,
       'apiKey': 'c0d42df9def6430283640131e3d26dae',
     },).then((value) {
       search = value.data['articles'];
@@ -160,7 +168,7 @@ class NewsCubit extends Cubit<NewsStates> {
       emit(NewsGetSearchSuccessState());
     }).catchError((error) {
       print("Error => ${error.toString()}");
-      emit(NewsGetSportsErrorState(error.toString()));
+      emit(NewsGetSearchErrorState(error.toString()));
     });
 
     emit(NewsGetSearchSuccessState());
@@ -182,4 +190,14 @@ class NewsCubit extends Cubit<NewsStates> {
 
 
   }
+
+  // void clearSearchList(searchCon,value){
+  //
+  //   search.clear();
+  //   searchCon.clear();
+  //   value="";
+  //
+  //   emit(ClearSearchListState());
+  //
+  // }
 }
